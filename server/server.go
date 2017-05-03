@@ -59,7 +59,7 @@ func uploadPosition(w http.ResponseWriter, req *http.Request) {
 }
 
 // download GET
-// http://localhost:8080/download?address=1604860a06bd66054cbbe4c547291cfa3897a8da
+// http://121.42.212.54:8080/download?address=1604860a06bd66054cbbe4c547291cfa3897a8da
 func downloadPosition(w http.ResponseWriter, req *http.Request) {
 	log.Println("downloadPosition")
 
@@ -110,6 +110,14 @@ func calculateFee(w http.ResponseWriter, req *http.Request) {
 	routes[addr] = append(routes[addr], newPoint)
 	muRout.Unlock()
 
+	var newUser user
+	newUser.Address = newPoint.Address
+	newUser.X = newPoint.X
+	newUser.Y = newPoint.Y
+	muUser.Lock()
+	users[newUser.Address] = newUser
+	muUser.Unlock()
+
 	fmt.Println(routes[addr])
 
 	bytes, _ := json.Marshal(newPoint)
@@ -117,7 +125,7 @@ func calculateFee(w http.ResponseWriter, req *http.Request) {
 }
 
 // getRoute GET
-// http://localhost:8080/route?address=1604860a06bd66054cbbe4c547291cfa3897a8da
+// http://121.42.212.54:8080/route?address=1604860a06bd66054cbbe4c547291cfa3897a8da
 func getRoute(w http.ResponseWriter, req *http.Request) {
 	log.Println("getRoute")
 
